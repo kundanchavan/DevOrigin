@@ -1,0 +1,11 @@
+{
+  "name": "AQUAPURE",
+  "description": "Next-generation water purification systems with advanced filtration technology and 3D visualization.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "product_catalog",
+    "ecommerce"
+  ]
+}
