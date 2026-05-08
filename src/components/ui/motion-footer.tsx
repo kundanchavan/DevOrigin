@@ -36,6 +36,13 @@ const STYLES = `
   --pill-highlight-hover: rgba(255, 255, 255, 0.15);
 }
 
+  /* Environment Overlays */
+  .footer-film-grain {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 5; opacity: 0.05; mix-blend-mode: overlay;
+      background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
+  }
+
 @keyframes footer-breathe {
   0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
   100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.5; }
@@ -227,23 +234,26 @@ export function CinematicFooter() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!wrapperRef.current) return;
+    
+    // Refresh ScrollTrigger when path changes to accommodate different page heights
+    ScrollTrigger.refresh();
 
     // React strict mode compatible GSAP context cleanup
     const ctx = gsap.context(() => {
       // Background Parallax
       gsap.fromTo(
         giantTextRef.current,
-        { y: "10vh", scale: 0.8, opacity: 0 },
+        { y: "15vh", scale: 0.85, opacity: 0 },
         {
           y: "0vh",
           scale: 1,
           opacity: 1,
-          ease: "power1.out",
+          ease: "power2.out",
           scrollTrigger: {
             trigger: wrapperRef.current,
-            start: "top 80%",
+            start: "top 95%",
             end: "bottom bottom",
-            scrub: 1,
+            scrub: 1.5,
           },
         }
       );
@@ -251,15 +261,15 @@ export function CinematicFooter() {
       // Staggered Content Reveal
       gsap.fromTo(
         [headingRef.current, linksRef.current],
-        { y: 50, opacity: 0 },
+        { y: 80, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          stagger: 0.15,
-          ease: "power3.out",
+          stagger: 0.1,
+          ease: "expo.out",
           scrollTrigger: {
             trigger: wrapperRef.current,
-            start: "top 45%",
+            start: "top 60%",
             end: "bottom bottom",
             scrub: 1,
           },
@@ -268,7 +278,7 @@ export function CinematicFooter() {
     }, wrapperRef);
 
     return () => ctx.revert();
-  },[]);
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -280,13 +290,15 @@ export function CinematicFooter() {
       
       <div
         ref={wrapperRef}
-        className="relative h-[55vh] w-full bg-slate-950"
+        className="relative w-full bg-slate-950 z-0 h-[45vh]"
         style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
       >
-        <footer className="fixed bottom-0 left-0 flex h-[55vh] w-full flex-col justify-between overflow-hidden bg-slate-950 text-white cinematic-footer-wrapper border-t border-slate-900">
+        <footer className="flex w-full flex-col justify-between overflow-hidden bg-slate-950 text-white cinematic-footer-wrapper border-t border-slate-900 z-0 fixed bottom-0 left-0 h-[45vh]">
+          
+          <div className="footer-film-grain" />
           
           {/* Ambient Light & Grid Background */}
-          <div className="footer-aurora absolute left-1/2 top-1/2 h-[55vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[80px] pointer-events-none z-0" />
+          <div className="footer-aurora absolute left-1/2 top-1/2 w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[100px] pointer-events-none z-0 h-[45vh]" />
           <div className="footer-bg-grid absolute inset-0 z-0 pointer-events-none" />
 
           {/* Giant background text */}
@@ -306,37 +318,42 @@ export function CinematicFooter() {
           </div>
 
           {/* 2. Main Center Content */}
-          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-16 w-full max-w-5xl mx-auto">
+          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 w-full max-w-5xl mx-auto mt-12">
             <h2
               ref={headingRef}
-              className="text-4xl md:text-7xl font-black footer-text-glow tracking-tighter mb-8 text-center"
+              className="text-3xl md:text-5xl font-black footer-text-glow tracking-tighter mb-6 text-center"
             >
               Purely Essential.
             </h2>
 
             {/* Interactive Magnetic Pills Layout */}
-            <div ref={linksRef} className="flex flex-col items-center gap-5 w-full">
-              <div className="flex flex-wrap justify-center gap-4 w-full">
-                <MagneticButton as="a" href="/products" className="footer-glass-pill px-8 py-4 rounded-full text-white font-bold text-sm flex items-center gap-3 group">
-                  Explore Products
+            <div ref={linksRef} className="flex flex-col items-center gap-4 w-full">
+              <div className="flex flex-wrap justify-center gap-3 w-full">
+                <MagneticButton as="a" href="/products" className="footer-glass-pill px-6 py-3 rounded-full text-white font-bold text-xs flex items-center gap-3 group transition-transform">
+                  Products
                 </MagneticButton>
                 
-                <MagneticButton as="a" href="/about" className="footer-glass-pill px-8 py-4 rounded-full text-white font-bold text-sm flex items-center gap-3 group">
-                  Our Technology
+                <MagneticButton as="a" href="/about" className="footer-glass-pill px-6 py-3 rounded-full text-white font-bold text-xs flex items-center gap-3 group transition-transform">
+                  About
+                </MagneticButton>
+
+                <MagneticButton as="a" href="/contact" className="footer-glass-pill px-6 py-3 rounded-full text-white font-bold text-xs flex items-center gap-3 group transition-transform">
+                  Contact
                 </MagneticButton>
               </div>
 
               {/* Secondary Text Links */}
-              <div className="flex flex-wrap justify-center gap-4 w-full mt-2">
-                <a href="#" className="text-white/40 font-medium text-[10px] md:text-xs hover:text-white transition-colors">Privacy Policy</a>
-                <a href="#" className="text-white/40 font-medium text-[10px] md:text-xs hover:text-white transition-colors">Terms of Service</a>
-                <a href="/contact" className="text-white/40 font-medium text-[10px] md:text-xs hover:text-white transition-colors">Support</a>
+              <div className="flex flex-wrap justify-center gap-6 w-full mt-2">
+                <a href="/login" className="text-white/40 font-medium text-[10px] md:text-xs hover:text-white transition-colors">Sign In</a>
+                <a href="/signup" className="text-white/40 font-medium text-[10px] md:text-xs hover:text-white transition-colors">Create Account</a>
+                <a href="#" className="text-white/40 font-medium text-[10px] md:text-xs hover:text-white transition-colors">Privacy</a>
+                <a href="#" className="text-white/40 font-medium text-[10px] md:text-xs hover:text-white transition-colors">Terms</a>
               </div>
             </div>
           </div>
 
           {/* 3. Bottom Bar / Credits */}
-          <div className="relative z-20 w-full pb-6 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="relative z-20 w-full px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4 pb-6">
             
             {/* Copyright */}
             <div className="text-white/20 text-[10px] font-semibold tracking-widest uppercase">

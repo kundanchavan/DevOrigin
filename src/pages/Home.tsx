@@ -131,8 +131,15 @@ export default function Home() {
       </section>
 
       {/* Featured Products List */}
-      <section className="py-16 bg-slate-950 text-white">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="relative py-16 bg-[#020617] text-white overflow-hidden">
+        {/* Decorative Background Elements */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)]" />
+          <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute -bottom-[20%] -right-[10%] w-[50%] h-[50%] bg-indigo-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">Best Sellers</h2>

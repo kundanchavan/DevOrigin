@@ -18,17 +18,29 @@ import { CartProvider } from './context/CartContext.tsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
 import ScrollToTop from './components/common/ScrollToTop.tsx';
 import { cn } from './lib/utils.ts';
+import { useEffect } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 function AppContent() {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
+  useEffect(() => {
+    // Refresh ScrollTrigger when path changes
+    ScrollTrigger.refresh();
+  }, [location.pathname]);
+
   return (
     <div className="flex flex-col min-h-screen bg-slate-950 selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
       <Header />
       <main className={cn(
-        "relative flex-grow shadow-2xl transition-colors duration-500",
-        isHomePage ? "bg-slate-950 rounded-none mb-0 z-0" : "bg-white rounded-b-[2.5rem] mb-[-1px] overflow-hidden z-10"
+        "relative flex-grow shadow-2xl transition-colors duration-500 z-10 rounded-b-[2.5rem] mb-[-2px] overflow-hidden bg-white",
+        isHomePage && "bg-slate-950"
       )}>
         <Routes>
           <Route path="/" element={<Home />} />
