@@ -1,12 +1,40 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle2, ShieldCheck, Zap, Droplets, Star, ShoppingBag, Layers, Cpu, Waves, Settings2, Play, Eye } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ShieldCheck, Zap, Droplets, Star, ShoppingBag, Layers, Cpu, Waves, Settings2, Play, Eye, Loader2 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { PRODUCTS } from '@/constants';
-import { cn } from '@/lib/utils';
+import { useState, useEffect } from 'react';
+import { getProducts, getSiteData } from '@/services/sanityService';
+import { Product } from '@/types';
 import { GlowCard } from '@/components/ui/spotlight-card';
+import ProductCard from '@/components/common/ProductCard';
+import NewLaunches from '@/components/NewLaunches';
+import ShaderShowcase from '@/components/ui/hero';
+
+import { CinematicHero } from '@/components/ui/cinematic-landing-hero';
 
 export default function Home() {
-  const mediaGallery = [
+  const [products, setProducts] = useState<Product[]>([]);
+  const [siteData, setSiteData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [productData, dynamicData] = await Promise.all([
+          getProducts(),
+          getSiteData()
+        ]);
+        setProducts(productData);
+        setSiteData(dynamicData);
+      } catch (error) {
+        console.error("Error loading home data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
+  const defaultMediaGallery = [
     {
       title: 'Advanced Filter Core',
       category: 'Filtration',
@@ -44,166 +72,71 @@ export default function Home() {
     }
   ];
 
+  const mediaGallery = siteData?.gallery || defaultMediaGallery;
+  const features = siteData?.features || [
+    { 
+      icon: ShieldCheck, 
+      title: '9-Stage Purity', 
+      desc: 'From sediment pre-filters to biological UV treatment, nothing escapes our system.' 
+    },
+    { 
+      icon: Zap, 
+      title: 'Instant Mineralization', 
+      desc: 'Automatically re-adds essential minerals like calcium and magnesium back into your flow.' 
+    },
+    { 
+      icon: CheckCircle2, 
+      title: 'Intelligent Monitoring', 
+      desc: 'Real-time TDS measurement and filter life tracking synced directly to your phone.' 
+    }
+  ];
+
+  const heroContent = (siteData?.settings && siteData.settings.hero) ? siteData.settings.hero : {
+    title: "Engineered for Vitality",
+    subtitle: "Our patented technology doesn't just clean water; it restores its natural molecular structure."
+  };
+
   return (
     <div className="flex flex-col w-full">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-slate-50">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/4 -left-20 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-50 animate-pulse" />
-          <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-blue-200 rounded-full blur-3xl opacity-30 animate-pulse" />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold tracking-widest uppercase mb-6">
-              <Zap size={14} /> New Generation IV
-            </div>
-            <h1 className="text-6xl md:text-8xl font-bold leading-[0.9] mb-6">
-              Purity in <span className="text-blue-600">Every</span> Drop.
-            </h1>
-            <p className="text-lg text-slate-600 mb-8 max-w-md leading-relaxed">
-              Advanced 9-stage molecular filtration meets elegant Swiss design. Transform your tap water into a source of vitality.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <NavLink 
-                to="/products"
-                className="px-8 py-4 bg-primary-blue text-white rounded-full font-semibold flex items-center gap-2 hover:bg-blue-700 transition-all hover:scale-105"
-              >
-                Explore Range <ArrowRight size={20} />
-              </NavLink>
-              <NavLink 
-                to="/about"
-                className="px-8 py-4 bg-white border border-slate-200 text-slate-900 rounded-full font-semibold hover:bg-slate-50 transition-all"
-              >
-                Our Science
-              </NavLink>
-            </div>
-
-            <div className="mt-12 grid grid-cols-3 gap-8 border-t border-slate-200 pt-8">
-              <div>
-                <div className="text-2xl font-bold text-slate-900">99.9%</div>
-                <div className="text-xs text-slate-500 uppercase tracking-wider font-medium">Impurity Removal</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-slate-900">0.001µ</div>
-                <div className="text-xs text-slate-500 uppercase tracking-wider font-medium">Filtration Precision</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-slate-900">10Y</div>
-                <div className="text-xs text-slate-500 uppercase tracking-wider font-medium">Warranty Period</div>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-            className="relative"
-          >
-            <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl bg-white border border-slate-100 aspect-[4/5] md:aspect-square flex items-center justify-center">
-               {/* Placeholder for the 3D Spline model or high-end image */}
-               <img 
-                src="https://images.unsplash.com/photo-1594398333201-9a997ba7493a?auto=format&fit=crop&q=80&w=800" 
-                alt="Aquapure Elite X" 
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
-              
-              {/* Overlay Badge */}
-              <div className="absolute bottom-8 left-8 right-8 p-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl text-white">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-xs font-bold uppercase tracking-widest opacity-70">Model 2024</div>
-                    <div className="text-xl font-bold">Elite X Carbon</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-xs font-bold uppercase tracking-widest opacity-70">Price</div>
-                    <div className="text-xl font-bold">$1,299</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Floating elements to simulate depth */}
-            <motion.div 
-               animate={{ y: [0, -20, 0] }}
-               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-               className="absolute -top-10 -right-10 w-32 h-32 bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center justify-center z-20 border border-slate-50"
-            >
-              <Droplets className="text-blue-500 mb-2" size={32} />
-              <div className="text-[10px] font-bold uppercase tracking-tighter text-slate-400">Pure Flow</div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Social Proof */}
-      <section className="py-12 bg-white border-y border-slate-100">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-wrap justify-center items-center gap-12 opacity-40 grayscale contrast-125">
-            <span className="text-xl font-black italic tracking-tighter">HYDRO-LABS</span>
-            <span className="text-xl font-black italic tracking-tighter">PURE-TECH</span>
-            <span className="text-xl font-black italic tracking-tighter">ECO-VITAL</span>
-            <span className="text-xl font-black italic tracking-tighter">AQUA-GEN</span>
-            <span className="text-xl font-black italic tracking-tighter">VITALITY.CO</span>
-          </div>
-        </div>
-      </section>
+      {/* Hero Shader Showcase */}
+      <ShaderShowcase className="min-h-screen" />
 
       {/* Featured Features */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Engineered for Vitality</h2>
-            <p className="text-slate-500 max-w-2xl mx-auto">Our patented technology doesn't just clean water; it restores its natural molecular structure.</p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">{heroContent.title}</h2>
+            <p className="text-slate-500 max-w-2xl mx-auto">{heroContent.subtitle}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {[
-              { 
-                icon: ShieldCheck, 
-                title: '9-Stage Purity', 
-                desc: 'From sediment pre-filters to biological UV treatment, nothing escapes our system.' 
-              },
-              { 
-                icon: Zap, 
-                title: 'Instant Mineralization', 
-                desc: 'Automatically re-adds essential minerals like calcium and magnesium back into your flow.' 
-              },
-              { 
-                icon: CheckCircle2, 
-                title: 'Intelligent Monitoring', 
-                desc: 'Real-time TDS measurement and filter life tracking synced directly to your phone.' 
-              }
-            ].map((feature, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ y: -10 }}
-                className="p-8 rounded-3xl border border-slate-100 hover:border-blue-100 hover:shadow-xl transition-all"
-              >
-                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mb-6">
-                  <feature.icon size={28} />
-                </div>
-                <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{feature.desc}</p>
-              </motion.div>
-            ))}
+            {features.map((feature: any, i: number) => {
+              const Icon = feature.icon || ShieldCheck;
+              return (
+                <motion.div
+                  key={i}
+                  whileHover={{ y: -10 }}
+                  className="p-8 rounded-3xl border border-slate-100 hover:border-blue-100 hover:shadow-xl transition-all"
+                >
+                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mb-6">
+                    {typeof Icon === 'function' ? <Icon size={28} /> : <ShieldCheck size={28} />}
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
+                  <p className="text-slate-600 leading-relaxed">{feature.desc}</p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* Featured Products List */}
-      <section className="py-24 bg-slate-950 text-white">
+      <section className="py-16 bg-slate-950 text-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
+          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">Top Selling Systems</h2>
-              <p className="text-slate-400 max-w-md">The most trusted molecular purification units by homes and labs worldwide.</p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">Best Sellers</h2>
+              <p className="text-slate-400 text-sm max-w-md">Our most trusted molecular purification units.</p>
             </div>
             <NavLink 
               to="/products"
@@ -213,68 +146,30 @@ export default function Home() {
             </NavLink>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {PRODUCTS.slice(0, 3).map((product, i) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="h-full"
-              >
-                <GlowCard 
-                  customSize 
-                  glowColor="blue"
-                  className="bg-slate-900/50 border-white/5 flex flex-col h-full !p-0 overflow-hidden group"
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden bg-slate-800">
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100"
-                    />
-                    {product.tag && (
-                      <div className="absolute top-4 left-4 bg-blue-600 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-white shadow-sm z-10">
-                        {product.tag}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="p-8 flex flex-col flex-grow relative z-10">
-                    <div className="flex items-center gap-1 mb-2">
-                      {[1, 2, 3, 4, 5].map(star => <Star key={star} size={12} className="fill-blue-500 text-blue-500" />)}
-                      <span className="text-xs text-slate-500 ml-2">(4.9/5)</span>
-                    </div>
-                    
-                    <div className="flex justify-between items-start mb-4">
-                      <h3 className="text-2xl font-bold">{product.name}</h3>
-                      <div className="text-xl font-display font-medium text-blue-400">${product.price}</div>
-                    </div>
-                    
-                    <p className="text-sm text-slate-400 mb-8 line-clamp-2 leading-relaxed">
-                      {product.description}
-                    </p>
-
-                    <div className="flex items-center justify-between pt-6 border-t border-white/5 mt-auto">
-                      <div className="flex flex-col">
-                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Precision</span>
-                        <span className="font-bold text-sm text-white">{product.specs.precision}</span>
-                      </div>
-                      <NavLink
-                        to="/products"
-                        className="p-3 bg-white/5 text-white rounded-2xl hover:bg-primary-blue transition-colors border border-white/5"
-                      >
-                        <ShoppingBag size={20} />
-                      </NavLink>
-                    </div>
-                  </div>
-                </GlowCard>
-              </motion.div>
-            ))}
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {isLoading ? (
+              <div className="col-span-full py-16 flex flex-col items-center justify-center text-slate-500 gap-4">
+                <Loader2 className="animate-spin" size={40} />
+                <p className="font-bold tracking-widest uppercase text-xs">Fetching Molecular Data...</p>
+              </div>
+            ) : (
+              products.slice(0, 5).map((product) => (
+                <ProductCard 
+                  key={product.id} 
+                  product={product} 
+                  variant="dark" 
+                  compact={true} 
+                />
+              ))
+            )}
           </div>
         </div>
       </section>
+
+
+      {/* New Launches Integration */}
+      <NewLaunches products={products} />
+
       {/* Technical Anatomy Section */}
       <section className="py-24 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
@@ -396,92 +291,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Component Media Gallery */}
-      <section className="py-24 bg-slate-50 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-             <div className="text-blue-600 font-bold tracking-[0.3em] uppercase text-[10px] mb-4">Visual Documentation</div>
-             <h2 className="text-4xl md:text-5xl font-bold mb-4">Component Innovation</h2>
-             <p className="text-slate-500 max-w-xl mx-auto">Witness the precision of our Swiss-engineered purification hardware through high-definition visual cycles.</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-6 h-auto md:h-[800px]">
-             {/* Large Feature Item */}
-             <motion.div 
-               whileHover={{ y: -10 }}
-               className="md:col-span-3 md:row-span-2 group relative overflow-hidden rounded-[3rem] bg-white border border-slate-100 shadow-sm"
-             >
-                <img src={mediaGallery[0].image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="gallery" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-60 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute inset-0 p-10 flex flex-col justify-end text-white translate-y-4 group-hover:translate-y-0 transition-transform">
-                   <div className="flex items-center gap-2 mb-2 text-blue-400 text-xs font-bold uppercase tracking-widest">
-                      {mediaGallery[0].isVideo ? <Play fill="currentColor" size={14} /> : <Eye size={14} />} 
-                      {mediaGallery[0].category}
-                   </div>
-                   <h3 className="text-3xl font-bold mb-2">{mediaGallery[0].title}</h3>
-                   <p className="text-sm opacity-0 group-hover:opacity-70 transition-opacity max-w-sm">{mediaGallery[0].desc}</p>
-                </div>
-             </motion.div>
-
-             {/* Secondary Items */}
-             <motion.div 
-               whileHover={{ y: -10 }}
-               className="md:col-span-3 md:row-span-1 group relative overflow-hidden rounded-[3rem] bg-white border border-slate-100 shadow-sm"
-             >
-               <img src={mediaGallery[1].image} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="gallery" />
-               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />
-               <div className="absolute top-8 left-8">
-                  <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center gap-4 text-white">
-                     <div className="w-8 h-8 rounded-full border border-white/50 flex items-center justify-center">
-                        <Play fill="white" size={12} className="ml-0.5" />
-                     </div>
-                     <div className="text-xs font-bold uppercase tracking-widest">{mediaGallery[1].title}</div>
-                  </div>
-               </div>
-             </motion.div>
-
-             {/* Grid Bottom Items */}
-             <div className="md:col-span-3 md:row-span-1 grid grid-cols-2 gap-6">
-                {mediaGallery.slice(2, 4).map((item, i) => (
-                  <motion.div 
-                    key={i}
-                    whileHover={{ scale: 0.98 }}
-                    className="relative overflow-hidden rounded-[2.5rem] bg-white aspect-square border border-slate-100 group"
-                  >
-                    <img src={item.image} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" alt="gallery" />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
-                       <h4 className="text-white font-bold text-sm mb-1">{item.title}</h4>
-                       <span className="text-[10px] text-blue-400 font-bold uppercase tracking-tighter">{item.category}</span>
-                    </div>
-                  </motion.div>
-                ))}
-             </div>
-          </div>
-          
-          <div className="mt-16 bg-slate-900 rounded-[3rem] p-12 text-white flex flex-col md:flex-row items-center justify-between gap-12 relative overflow-hidden">
-             <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-             <div className="relative z-10 max-w-md">
-                <h3 className="text-3xl font-bold mb-4">Download Technical Documentation</h3>
-                <p className="text-slate-400 text-sm leading-relaxed mb-8">Access detailed whitepapers on our proprietary molecular mesh, 3D body construction, and chemical re-infusion logic.</p>
-                <div className="flex gap-4">
-                   <button className="px-6 py-3 bg-blue-600 rounded-xl font-bold text-sm hover:bg-blue-700 transition-all">Download v4.0</button>
-                   <button className="px-6 py-3 border border-white/10 rounded-xl font-bold text-sm hover:bg-white/5 transition-all">Request Sample</button>
-                </div>
-             </div>
-             <div className="relative z-10 md:w-1/2 flex items-center justify-center">
-                <div className="relative w-full aspect-video bg-white/5 rounded-3xl border border-white/10 flex items-center justify-center group overflow-hidden">
-                   <div className="text-center">
-                      <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                        <Play size={24} fill="currentColor" />
-                      </div>
-                      <div className="text-xs font-bold uppercase tracking-[0.3em]">Watch Assembly Film</div>
-                   </div>
-                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent opacity-40" />
-                </div>
-             </div>
-          </div>
-        </div>
-      </section>
+      {/* Experience Innovation */}
+      <motion.section 
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+        viewport={{ once: true }}
+        className="relative bg-slate-950 mt-[-1px]"
+      >
+        <CinematicHero 
+          brandName="Aura"
+          tagline1="Pure flow,"
+          tagline2="total vitality."
+          cardHeading="Next-gen molecular routing."
+          cardDescription={<>Our patented <span className="text-white font-semibold">Aura Core</span> technology provides 9-stage filtration with real-time TDS monitoring and antioxidant re-infusion for the purest water on the planet.</>}
+          metricValue={99.9}
+          metricLabel="Purity %"
+          ctaHeading="Experience the future of water."
+          ctaDescription="Join over 50,000 households that trust Aura to deliver molecularly perfect water every single day."
+        />
+      </motion.section>
     </div>
   );
 }

@@ -28,7 +28,7 @@ export default function AboutPage() {
               Redefining the <span className="text-blue-600 italic">Essence</span> of Life.
             </h1>
             <p className="text-slate-500 text-lg leading-relaxed mb-8">
-              AQUAPURE began with a simple observation: tap water is a chemical soup. Our founders, former biotech engineers, spent 4 years developing the "Matrix" membrane—a filtration system that replicates the natural purification cycles of the Swiss Alps.
+              Dev Origin began with a simple observation: tap water is a chemical soup. Our founders, former biotech engineers, spent 4 years developing the "Matrix" membrane—a filtration system that replicates the natural purification cycles of the Swiss Alps.
             </p>
             <div className="flex items-center gap-6">
               <div className="text-center">

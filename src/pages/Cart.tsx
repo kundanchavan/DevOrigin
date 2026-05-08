@@ -45,7 +45,13 @@ export default function CartPage() {
                   className="bg-white p-6 rounded-3xl border border-slate-100 flex gap-6 items-center flex-wrap sm:flex-nowrap"
                 >
                   <div className="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-slate-100 border border-slate-50">
-                    <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                    {item.image ? (
+                      <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-slate-300">
+                        <ShoppingCart size={24} />
+                      </div>
+                    )}
                   </div>
                   
                   <div className="flex-grow">

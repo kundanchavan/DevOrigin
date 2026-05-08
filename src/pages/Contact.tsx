@@ -38,7 +38,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <div className="font-bold">Email Us</div>
-                  <div className="text-slate-500">solutions@aquapure.com</div>
+                  <div className="text-slate-500">solutions@devorigin.com</div>
                 </div>
               </div>
               <div className="flex items-start gap-4">
@@ -128,7 +128,7 @@ export default function ContactPage() {
                    <Map
                      defaultCenter={{ lat: 47.3769, lng: 8.5417 }} // Zurich
                      defaultZoom={13}
-                     mapId="AQUAPURE_MAP"
+                     mapId="DEV_ORIGIN_MAP"
                      gestureHandling={'greedy'}
                      disableDefaultUI={true}
                      style={{ width: '100%', height: '100%' }}
@@ -139,7 +139,7 @@ export default function ContactPage() {
                             <Droplets size={24} />
                           </div>
                           <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-white px-3 py-1 rounded-lg text-[10px] font-bold shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-                            AQUAPURE ZURICH
+                            DEV ORIGIN ZURICH
                           </div>
                         </div>
                      </AdvancedMarker>

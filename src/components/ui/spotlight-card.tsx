@@ -41,14 +41,19 @@ const GlowCard: React.FC<GlowCardProps> = ({
       const { clientX: x, clientY: y } = e;
       
       if (cardRef.current) {
-        cardRef.current.style.setProperty('--x', x.toFixed(2));
-        cardRef.current.style.setProperty('--xp', (x / window.innerWidth).toFixed(2));
-        cardRef.current.style.setProperty('--y', y.toFixed(2));
-        cardRef.current.style.setProperty('--yp', (y / window.innerHeight).toFixed(2));
+        // Use requestAnimationFrame for smoother and more performant updates
+        requestAnimationFrame(() => {
+          if (cardRef.current) {
+            cardRef.current.style.setProperty('--x', x.toFixed(2));
+            cardRef.current.style.setProperty('--xp', (x / window.innerWidth).toFixed(2));
+            cardRef.current.style.setProperty('--y', y.toFixed(2));
+            cardRef.current.style.setProperty('--yp', (y / window.innerHeight).toFixed(2));
+          }
+        });
       }
     };
 
-    document.addEventListener('pointermove', syncPointer);
+    document.addEventListener('pointermove', syncPointer, { passive: true });
     return () => document.removeEventListener('pointermove', syncPointer);
   }, []);
 
@@ -84,10 +89,11 @@ const GlowCard: React.FC<GlowCardProps> = ({
       backgroundColor: 'var(--backdrop, transparent)',
       backgroundSize: 'calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)))',
       backgroundPosition: '50% 50%',
-      backgroundAttachment: 'fixed',
+      // Removed backgroundAttachment: 'fixed' for performance
       border: 'var(--border-size) solid var(--backup-border)',
       position: 'relative' as const,
       touchAction: 'none' as const,
+      willChange: 'background-image'
     };
 
     // Add width and height if provided
@@ -110,7 +116,6 @@ const GlowCard: React.FC<GlowCardProps> = ({
       inset: calc(var(--border-size) * -1);
       border: var(--border-size) solid transparent;
       border-radius: calc(var(--radius) * 1px);
-      background-attachment: fixed;
       background-size: calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
       background-repeat: no-repeat;
       background-position: 50% 50%;

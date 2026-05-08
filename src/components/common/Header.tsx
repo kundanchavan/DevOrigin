@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X, Droplets } from 'lucide-react';
+import { ShoppingCart, Menu, X, Droplets, User, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { itemCount } = useCart();
+  const { user, isAuthenticated, logout } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
@@ -26,6 +28,8 @@ export default function Header() {
     { name: 'Contact', path: '/contact' },
   ];
 
+  const isHomePage = location.pathname === '/';
+
   return (
     <header
       className={cn(
@@ -40,9 +44,9 @@ export default function Header() {
           </div>
           <span className={cn(
             'text-2xl font-bold tracking-tighter transition-colors',
-            isScrolled ? 'text-slate-900' : 'text-slate-900'
+            isScrolled ? 'text-slate-900' : (isHomePage ? 'text-white' : 'text-slate-900')
           )}>
-            AQUAPURE
+            Dev Origin
           </span>
         </NavLink>
 
@@ -53,8 +57,10 @@ export default function Header() {
               key={link.path}
               to={link.path}
               className={({ isActive }) => cn(
-                'text-sm font-medium tracking-widest uppercase transition-colors hover:text-blue-600',
-                isActive ? 'text-blue-600' : 'text-slate-600'
+                'text-sm font-medium tracking-widest uppercase transition-colors',
+                isActive 
+                  ? 'text-blue-600' 
+                  : (isScrolled ? 'text-slate-600 hover:text-blue-600' : (isHomePage ? 'text-white/70 hover:text-white' : 'text-slate-600 hover:text-blue-600'))
               )}
             >
               {link.name}
@@ -62,12 +68,15 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           <NavLink
             to="/cart"
-            className="p-2 rounded-full hover:bg-slate-100 transition-colors relative"
+            className={cn(
+              "p-2 rounded-full transition-colors relative",
+              isScrolled ? "hover:bg-slate-100" : (isHomePage ? "hover:bg-white/10" : "hover:bg-slate-100")
+            )}
           >
-            <ShoppingCart size={22} className="text-slate-700" />
+            <ShoppingCart size={22} className={cn(isScrolled ? "text-slate-700" : (isHomePage ? "text-white" : "text-slate-700"))} />
             {itemCount > 0 && (
               <motion.span 
                 initial={{ scale: 0 }}
@@ -78,10 +87,50 @@ export default function Header() {
               </motion.span>
             )}
           </NavLink>
+
+          <div className="hidden md:flex items-center gap-2">
+            {isAuthenticated ? (
+              <div className={cn(
+                "flex items-center gap-3 px-4 py-2 rounded-full border transition-all",
+                isScrolled 
+                  ? "bg-slate-100 border-slate-200" 
+                  : (isHomePage ? "bg-white/10 border-white/20 backdrop-blur-md" : "bg-slate-100 border-slate-200")
+              )}>
+                <User size={16} className="text-blue-600" />
+                <span className={cn(
+                  "text-xs font-bold truncate max-w-[100px]",
+                  isScrolled ? "text-slate-700" : (isHomePage ? "text-white" : "text-slate-700")
+                )}>
+                  {user?.name || user?.email}
+                </span>
+                <button onClick={logout} className="text-slate-400 hover:text-red-500 transition-colors">
+                  <LogOut size={16} />
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <NavLink 
+                  to="/login" 
+                  className={cn(
+                    "px-4 py-2 text-xs font-bold uppercase tracking-widest transition-colors",
+                    isScrolled ? "text-slate-600 hover:text-blue-600" : (isHomePage ? "text-white/80 hover:text-white" : "text-slate-600 hover:text-blue-600")
+                  )}
+                >
+                  Login
+                </NavLink>
+                <NavLink to="/signup" className="px-5 py-2 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-blue-700 transition-all shadow-lg active:scale-95">
+                  Sign Up
+                </NavLink>
+              </div>
+            )}
+          </div>
           
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-slate-700"
+            className={cn(
+              "md:hidden p-2",
+              isScrolled ? "text-slate-700" : (isHomePage ? "text-white" : "text-slate-700")
+            )}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -108,6 +157,23 @@ export default function Header() {
                   {link.name}
                 </NavLink>
               ))}
+              <hr className="border-slate-100" />
+              {isAuthenticated ? (
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-2">
+                    <User size={20} className="text-blue-600" />
+                    <span className="font-bold">{user?.name || user?.email}</span>
+                  </div>
+                  <button onClick={() => { logout(); setIsMobileMenuOpen(false); }} className="text-left text-red-500 font-bold flex items-center gap-2">
+                    <LogOut size={20} /> Logout
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  <NavLink to="/login" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-bold text-slate-900">Login</NavLink>
+                  <NavLink to="/signup" onClick={() => setIsMobileMenuOpen(false)} className="bg-slate-900 text-white py-4 rounded-2xl text-center font-bold">Sign Up</NavLink>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
