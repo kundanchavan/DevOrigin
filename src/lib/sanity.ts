@@ -18,8 +18,8 @@ if (isSanityConfigured) {
 }
 
 export const client = createClient({
-  projectId: projectId || 'placeholder',
-  dataset: dataset || 'production',
+  projectId: projectId,
+  dataset: dataset,
   useCdn: false,
   apiVersion: '2024-03-01',
   token: import.meta.env.VITE_SANITY_WRITE_TOKEN,
