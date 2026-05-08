@@ -96,6 +96,9 @@ export default function Home() {
     subtitle: "Our patented technology doesn't just clean water; it restores its natural molecular structure."
   };
 
+  const bestSellers = products.filter(p => p.tag === 'Best Seller').slice(0, 5);
+  const displayBestSellers = bestSellers.length > 0 ? bestSellers : products.slice(0, 5);
+
   return (
     <div className="flex flex-col w-full">
       {/* Hero Shader Showcase */}
@@ -131,42 +134,34 @@ export default function Home() {
       </section>
 
       {/* Featured Products List */}
-      <section className="relative py-16 bg-[#020617] text-white overflow-hidden">
-        {/* Decorative Background Elements */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)]" />
-          <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[120px] animate-pulse" />
-          <div className="absolute -bottom-[20%] -right-[10%] w-[50%] h-[50%] bg-indigo-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">Best Sellers</h2>
-              <p className="text-slate-400 text-sm max-w-md">Our most trusted molecular purification units.</p>
+      <section className="relative py-24 bg-white overflow-hidden">
+        <div className="relative z-10 max-w-[1200px] mx-auto px-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
+            <div className="space-y-2">
+              <h2 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 leading-tight">
+                Best Sellers
+              </h2>
+              <p className="text-slate-500 font-medium">Our most trusted molecular purification units.</p>
             </div>
             <NavLink 
               to="/products"
-              className="text-blue-400 font-bold flex items-center gap-2 hover:gap-3 transition-all group"
+              className="text-blue-600 font-bold flex items-center gap-2 hover:gap-3 transition-all group px-6 py-3 bg-blue-50 rounded-full"
             >
-              View Full Collection <ArrowRight size={20} />
+              View Full Collection <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </NavLink>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {isLoading ? (
               <div className="col-span-full py-16 flex flex-col items-center justify-center text-slate-500 gap-4">
                 <Loader2 className="animate-spin" size={40} />
                 <p className="font-bold tracking-widest uppercase text-xs">Fetching Molecular Data...</p>
               </div>
             ) : (
-              products.slice(0, 5).map((product) => (
-                <ProductCard 
-                  key={product.id} 
-                  product={product} 
-                  variant="dark" 
-                  compact={true} 
-                />
+              displayBestSellers.map((product) => (
+                <div key={product.id} className="h-full">
+                  <ProductCard product={product} />
+                </div>
               ))
             )}
           </div>
@@ -189,14 +184,23 @@ export default function Home() {
                   whileInView={{ opacity: 1, rotate: 0 }}
                   className="relative w-full h-full"
                 >
-                  {/* Central Body Mockup */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-48 h-80 bg-white shadow-2xl rounded-3xl border border-slate-100 flex flex-col p-4">
-                      <div className="h-2 w-full bg-blue-100 rounded-full mb-4" />
-                      <div className="flex-grow flex flex-col gap-4">
-                        <div className="h-12 w-full bg-slate-50 rounded-xl animate-pulse" />
-                        <div className="h-12 w-full bg-blue-50 rounded-xl" />
-                        <div className="h-12 w-full bg-slate-50 rounded-xl animate-pulse" />
+                  {/* Central Body Unit Image */}
+                  <div className="absolute inset-0 flex items-center justify-center p-8">
+                    <div className="relative w-full h-full bg-white shadow-2xl rounded-3xl border border-slate-100 overflow-hidden group">
+                      <img 
+                        src="https://images.unsplash.com/photo-1581093583449-80d50ad975e5?auto=format&fit=crop&q=80&w=800" 
+                        alt="Aura PURITY unit interface"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-transparent" />
+                      <div className="absolute bottom-4 left-4 right-4 h-1 bg-white/20 rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          whileInView={{ width: '70%' }}
+                          transition={{ duration: 2, delay: 0.5 }}
+                          className="h-full bg-blue-400"
+                        />
                       </div>
                     </div>
                   </div>

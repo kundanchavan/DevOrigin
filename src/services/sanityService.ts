@@ -61,12 +61,27 @@ export async function getProducts(): Promise<Product[]> {
   }
 }
 
+export async function uploadImage(file: File) {
+  if (!isSanityConfigured) throw new Error('Sanity not configured');
+  if (!import.meta.env.VITE_SANITY_WRITE_TOKEN) throw new Error('Write token missing');
+
+  try {
+    const asset = await client.assets.upload('image', file, {
+      filename: file.name,
+    });
+    return asset;
+  } catch (error) {
+    console.error('Sanity Upload Error:', error);
+    throw error;
+  }
+}
+
 export async function createProduct(product: Partial<Product>) {
   if (!import.meta.env.VITE_SANITY_WRITE_TOKEN) {
     throw new Error('VITE_SANITY_WRITE_TOKEN is missing. Please add it to the Settings menu.');
   }
   
-  return client.create({
+  const doc = {
     _type: 'product',
     name: product.name,
     category: product.category,
@@ -79,8 +94,21 @@ export async function createProduct(product: Partial<Product>) {
     isNewLaunch: product.isNewLaunch,
     bgColor: product.bgColor,
     specs: product.specs,
-    imageUrl: product.image, // Store external URLs if provided
-  });
+    imageUrl: product.image?.startsWith('data:') ? undefined : product.image, // Don't store large base64 in string field
+  } as any;
+
+  // Handle Sanity image asset if provided as a ref or data URI was uploaded
+  if (product.imageAssetId) {
+    doc.image = {
+      _type: 'image',
+      asset: {
+        _type: 'reference',
+        _ref: product.imageAssetId
+      }
+    };
+  }
+  
+  return client.create(doc);
 }
 
 export async function updateProduct(id: string, product: Partial<Product>) {
@@ -88,22 +116,34 @@ export async function updateProduct(id: string, product: Partial<Product>) {
     throw new Error('VITE_SANITY_WRITE_TOKEN is missing. Please add it to the Settings menu.');
   }
 
+  const patch = {
+    name: product.name,
+    category: product.category,
+    price: product.price,
+    description: product.description,
+    features: product.features,
+    tag: product.tag,
+    label: product.label,
+    tagline: product.tagline,
+    isNewLaunch: product.isNewLaunch,
+    bgColor: product.bgColor,
+    specs: product.specs,
+    imageUrl: product.image?.startsWith('data:') ? undefined : product.image,
+  } as any;
+
+  if (product.imageAssetId) {
+    patch.image = {
+      _type: 'image',
+      asset: {
+        _type: 'reference',
+        _ref: product.imageAssetId
+      }
+    };
+  }
+
   return client
     .patch(id)
-    .set({
-      name: product.name,
-      category: product.category,
-      price: product.price,
-      description: product.description,
-      features: product.features,
-      tag: product.tag,
-      label: product.label,
-      tagline: product.tagline,
-      isNewLaunch: product.isNewLaunch,
-      bgColor: product.bgColor,
-      specs: product.specs,
-      imageUrl: product.image,
-    })
+    .set(patch)
     .commit();
 }
 

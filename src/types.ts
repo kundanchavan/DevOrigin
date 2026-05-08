@@ -11,6 +11,7 @@ export interface Product {
   tagline?: string; // e.g., "Instant hot water on demand"
   isNewLaunch?: boolean;
   bgColor?: string; // e.g., "bg-[#eef5ff]" or "bg-[#fff1ed]"
+  imageAssetId?: string;
   specs: {
     stages: number;
     precision: string;

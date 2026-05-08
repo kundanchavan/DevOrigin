@@ -13,6 +13,7 @@ import Cart from './pages/Cart.tsx';
 import Admin from './pages/Admin.tsx';
 import Login from './pages/Login.tsx';
 import Signup from './pages/Signup.tsx';
+import ProductDetail from './pages/ProductDetail.tsx';
 import { CinematicFooter } from './components/ui/motion-footer.tsx';
 import { CartProvider } from './context/CartContext.tsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
@@ -51,6 +52,7 @@ function AppContent() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
         </Routes>
       </main>
       <CinematicFooter />

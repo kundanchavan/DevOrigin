@@ -20,19 +20,22 @@ export default function NewLaunches({ products }: NewLaunchesProps) {
 
   return (
     <section className="py-24 bg-white overflow-hidden">
-      <div className="max-w-[1400px] mx-auto px-6">
-        <div className="flex justify-between items-end mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900">
-            New Launches
-          </h2>
-          <button className="text-blue-600 font-bold flex items-center gap-2 hover:gap-3 transition-all group">
+      <div className="max-w-[1200px] mx-auto px-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
+          <div className="space-y-2">
+            <h2 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 leading-tight">
+              New Launches
+            </h2>
+            <p className="text-slate-500 font-medium">The latest in molecular purification technology.</p>
+          </div>
+          <button className="text-blue-600 font-bold flex items-center gap-2 hover:gap-3 transition-all group px-6 py-3 bg-blue-50 rounded-full">
             Explore All <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
 
-        <div className="flex gap-6 overflow-x-auto pb-12 snap-x no-scrollbar">
-          {newLaunches.map((product, i) => (
-            <div key={product.id} className="min-w-[300px] md:min-w-[350px] snap-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {newLaunches.map((product) => (
+            <div key={product.id} className="h-full">
               <ProductCard product={product} />
             </div>
           ))}

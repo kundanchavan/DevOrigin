@@ -20,7 +20,13 @@ import {
   X
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { getProducts, createProduct, updateProduct, deleteProduct } from '@/services/sanityService';
+import { 
+  getProducts, 
+  createProduct, 
+  updateProduct, 
+  deleteProduct,
+  uploadImage
+} from '@/services/sanityService';
 import { Product } from '@/types';
 import { isSanityConfigured } from '@/lib/sanity';
 
@@ -35,6 +41,8 @@ export default function AdminPage() {
   // Edit Form State
   const [isEditing, setIsEditing] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Partial<Product> | null>(null);
+  const [featuresText, setFeaturesText] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -208,43 +216,49 @@ export default function AdminPage() {
                   </div>
                 )}
                 {isRefreshing && <Loader2 className="animate-spin text-slate-400 self-center" size={20} />}
-                <button 
-                  onClick={() => {
-                    setEditingProduct({
-                      name: '',
-                      price: 0,
-                      description: '',
-                      category: 'Countertop',
-                      label: '',
-                      tagline: '',
-                      bgColor: 'bg-[#eef5ff]',
-                      isNewLaunch: false,
-                      image: '',
-                      features: [],
-                      specs: { stages: 0, precision: '-', flowRate: '-' }
-                    });
-                    setIsEditing(true);
-                  }}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all"
-                >
-                  <Plus size={20} /> Add Product
-                </button>
-              </div>
-            </header>
-
-            {/* Product Editing Modal */}
-            <AnimatePresence>
-              {isEditing && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6">
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 20 }}
-                    className="bg-white rounded-[2.5rem] w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl"
+                  <button 
+                    disabled={isRefreshing}
+                    onClick={() => {
+                      setEditingProduct({
+                        name: '',
+                        price: undefined,
+                        description: '',
+                        category: '',
+                        label: '',
+                        tagline: '',
+                        bgColor: 'bg-[#eef5ff]',
+                        isNewLaunch: false,
+                        image: '',
+                        features: [],
+                        specs: { stages: 0, precision: '-', flowRate: '-' }
+                      });
+                      setFeaturesText('');
+                      setIsEditing(true);
+                    }}
+                    className="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all disabled:opacity-50"
                   >
+                    <Plus size={20} /> Add Product
+                  </button>
+                </div>
+              </header>
+
+              {/* Product Editing Modal */}
+              <AnimatePresence>
+                {isEditing && (
+                  <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6">
+                    <motion.div 
+                      key="modal"
+                      initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                      className="bg-white rounded-[2.5rem] w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl"
+                    >
                     <div className="p-8 border-b border-slate-100 flex justify-between items-center shrink-0">
                       <h2 className="text-2xl font-bold">{editingProduct?.id ? 'Edit Product' : 'New Product'}</h2>
-                      <button onClick={() => setIsEditing(false)} className="p-2 hover:bg-slate-100 rounded-full">
+                      <button onClick={() => {
+                        setIsEditing(false);
+                        setFeaturesText('');
+                      }} className="p-2 hover:bg-slate-100 rounded-full">
                         <X size={20} />
                       </button>
                     </div>
@@ -267,9 +281,11 @@ export default function AdminPage() {
                           <input 
                             required
                             type="number" 
+                            step="0.01"
                             className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 outline-none focus:ring-1 focus:ring-blue-500"
-                            value={editingProduct?.price || 0}
-                            onChange={(e) => setEditingProduct({...editingProduct, price: parseFloat(e.target.value)})}
+                            placeholder="Enter price"
+                            value={editingProduct?.price ?? ''}
+                            onChange={(e) => setEditingProduct({...editingProduct, price: e.target.value === '' ? undefined : parseFloat(e.target.value)})}
                           />
                         </div>
                       </div>
@@ -277,14 +293,19 @@ export default function AdminPage() {
                       <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Category</label>
-                          <input 
+                          <select 
                             required
-                            type="text" 
-                            placeholder="e.g. Countertop, Industrial"
-                            className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 outline-none focus:ring-1 focus:ring-blue-500"
+                            className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 outline-none focus:ring-1 focus:ring-blue-500 appearance-none"
                             value={editingProduct?.category || ''}
                             onChange={(e) => setEditingProduct({...editingProduct, category: e.target.value})}
-                          />
+                          >
+                            <option value="" disabled>Select Category</option>
+                            <option value="UV">UV</option>
+                            <option value="RO">RO</option>
+                            <option value="UV+RO">UV+RO</option>
+                            <option value="Copper">Copper</option>
+                            <option value="Mineral">Mineral</option>
+                          </select>
                         </div>
                         <div className="space-y-2">
                           <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Product Tag (Badge)</label>
@@ -345,24 +366,37 @@ export default function AdminPage() {
                           type="text" 
                           placeholder="UV Sterilization, Mineral Re-infusion, ..."
                           className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 outline-none focus:ring-1 focus:ring-blue-500"
-                          value={editingProduct?.features?.join(', ') || ''}
-                          onChange={(e) => setEditingProduct({
-                            ...editingProduct, 
-                            features: e.target.value.split(',').map(f => f.trim()).filter(Boolean)
-                          })}
+                          value={featuresText}
+                          onChange={(e) => {
+                            setFeaturesText(e.target.value);
+                            const features = e.target.value.split(',').map(f => f.trim()).filter(Boolean);
+                            setEditingProduct({
+                              ...editingProduct, 
+                              features
+                            });
+                          }}
                         />
                       </div>
 
                       <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Category Label</label>
-                          <input 
-                            type="text" 
-                            placeholder="e.g. WATER PURIFIERS"
+                          <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Display Section</label>
+                          <select 
                             className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 outline-none focus:ring-1 focus:ring-blue-500"
-                            value={editingProduct?.label || ''}
-                            onChange={(e) => setEditingProduct({...editingProduct, label: e.target.value})}
-                          />
+                            value={editingProduct?.isNewLaunch ? 'new' : (editingProduct?.tag === 'Best Seller' ? 'bestseller' : 'none')}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setEditingProduct({
+                                ...editingProduct,
+                                isNewLaunch: val === 'new',
+                                tag: val === 'bestseller' ? 'Best Seller' : (val === 'new' ? 'New Launch' : '')
+                              });
+                            }}
+                          >
+                            <option value="none">Standard Listing</option>
+                            <option value="bestseller">Best Seller</option>
+                            <option value="new">New Launch</option>
+                          </select>
                         </div>
                         <div className="space-y-2">
                           <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Card Background</label>
@@ -390,27 +424,71 @@ export default function AdminPage() {
                         />
                       </div>
 
-                      <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                        <input 
-                          type="checkbox"
-                          id="isNewLaunch"
-                          className="w-5 h-5 rounded border-slate-200 text-blue-600 focus:ring-blue-500"
-                          checked={editingProduct?.isNewLaunch || false}
-                          onChange={(e) => setEditingProduct({...editingProduct, isNewLaunch: e.target.checked})}
-                        />
-                        <label htmlFor="isNewLaunch" className="text-sm font-bold text-slate-700 cursor-pointer">
-                          Display in "New Launches" section on Home
-                        </label>
-                      </div>
-
                       <div className="space-y-2">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Image URL</label>
-                        <input 
-                          type="text" 
-                          className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 outline-none focus:ring-1 focus:ring-blue-500"
-                          value={editingProduct?.image || ''}
-                          onChange={(e) => setEditingProduct({...editingProduct, image: e.target.value})}
-                        />
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Image</label>
+                        <div className="flex gap-4">
+                          <div className="flex-grow space-y-2">
+                            <input 
+                              type="text" 
+                              placeholder="Image URL"
+                              className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 outline-none focus:ring-1 focus:ring-blue-500"
+                              value={editingProduct?.image || ''}
+                              onChange={(e) => setEditingProduct({...editingProduct, image: e.target.value})}
+                            />
+                          </div>
+                          <div className="shrink-0">
+                            <label className="cursor-pointer flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all">
+                              {isUploading ? <Loader2 className="animate-spin" size={20} /> : <ImageIcon size={20} />}
+                              <span>Upload</span>
+                              <input 
+                                type="file" 
+                                className="hidden" 
+                                accept="image/*"
+                                onChange={async (e) => {
+                                  const file = e.target.files?.[0];
+                                  if (!file) return;
+                                  
+                                  setIsUploading(true);
+                                  try {
+                                    if (isSanityConfigured) {
+                                       const asset = await uploadImage(file);
+                                       setEditingProduct({
+                                         ...editingProduct,
+                                         image: asset.url,
+                                         imageAssetId: asset._id
+                                       });
+                                    } else {
+                                      // Use FileReader to get base64 for immediate preview
+                                      const reader = new FileReader();
+                                      reader.onloadend = () => {
+                                        setEditingProduct({
+                                          ...editingProduct,
+                                          image: reader.result as string
+                                        });
+                                      };
+                                      reader.readAsDataURL(file);
+                                    }
+                                  } catch (err) {
+                                    console.error('Upload error:', err);
+                                  } finally {
+                                    setIsUploading(false);
+                                  }
+                                }}
+                              />
+                            </label>
+                          </div>
+                        </div>
+                        {editingProduct?.image && (
+                          <div className="mt-2 w-20 h-20 rounded-xl bg-slate-100 border border-slate-100 overflow-hidden relative group">
+                            <img src={editingProduct.image} className="w-full h-full object-cover" alt="Preview" />
+                            <button 
+                              onClick={() => setEditingProduct({...editingProduct, image: ''})}
+                              className="absolute inset-0 bg-red-600/80 text-white opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
+                            >
+                              <X size={16} />
+                            </button>
+                          </div>
+                        )}
                       </div>
 
                       <div className="space-y-2">
@@ -520,15 +598,16 @@ export default function AdminPage() {
                             </td>
                             <td className="px-8 py-5">
                               <div className="flex gap-2">
-                                <button 
-                                  onClick={() => {
-                                    setEditingProduct(p);
-                                    setIsEditing(true);
-                                  }}
-                                  className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
-                                >
-                                  <Edit2 size={16} />
-                                </button>
+                                  <button 
+                                    onClick={() => {
+                                      setEditingProduct(p);
+                                      setFeaturesText(p.features?.join(', ') || '');
+                                      setIsEditing(true);
+                                    }}
+                                    className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                                  >
+                                    <Edit2 size={16} />
+                                  </button>
                                 <button 
                                   onClick={() => handleDelete(p.id)}
                                   className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
@@ -566,6 +645,7 @@ export default function AdminPage() {
                           <button 
                             onClick={() => {
                               setEditingProduct(p);
+                              setFeaturesText(p.features?.join(', ') || '');
                               setIsEditing(true);
                             }}
                             className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-slate-900 shadow-xl"
