@@ -1,21 +1,27 @@
 /// <reference types="vite/client" />
+
 import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 
 const projectId = import.meta.env.VITE_SANITY_PROJECT_ID;
-const dataset = 'production';
+const dataset = import.meta.env.VITE_SANITY_DATASET;
 
-export const isSanityConfigured = !!projectId && projectId !== 'placeholder';
+export const isSanityConfigured =
+  !!projectId &&
+  !!dataset &&
+  projectId !== 'placeholder';
 
 if (isSanityConfigured) {
-  console.log(`[Sanity] Initializing with Project: ${projectId}, Dataset: ${dataset}`);
+  console.log(
+    `[Sanity] Initializing with Project: ${projectId}, Dataset: ${dataset}`
+  );
 }
 
 export const client = createClient({
   projectId: projectId || 'placeholder',
-  dataset: dataset,
-  useCdn: false, // Setting to false temporarily to bypass potential CDN propagation issues
-  apiVersion: '2024-03-01', // Updated to a newer stable version
+  dataset: dataset || 'production',
+  useCdn: false,
+  apiVersion: '2024-03-01',
   token: import.meta.env.VITE_SANITY_WRITE_TOKEN,
 });
 
