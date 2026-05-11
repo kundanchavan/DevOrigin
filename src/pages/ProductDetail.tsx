@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { 
   ArrowLeft, 
   ShoppingBag, 
@@ -9,12 +9,10 @@ import {
   CheckCircle2, 
   Zap, 
   Droplets,
-  ChevronRight,
   Plus,
   Minus,
   Check,
   Award,
-  Cpu,
   Clock,
   Shield
 } from 'lucide-react';
@@ -54,7 +52,7 @@ export default function ProductDetail() {
   const handleAddToCart = () => {
     if (!product) return;
     for (let i = 0; i < quantity; i++) {
-      addToCart(product);
+       addToCart(product);
     }
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
@@ -67,7 +65,7 @@ export default function ProductDetail() {
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
         >
-          <Droplets className="text-blue-500" size={40} />
+          <Droplets className="text-blue-600" size={40} />
         </motion.div>
       </div>
     );
@@ -99,7 +97,7 @@ export default function ProductDetail() {
             <ArrowLeft size={18} /> Back
           </button>
           <div className="flex items-center gap-6">
-            <button className="text-slate-500 hover:text-slate-900 transition-colors">
+            <button className="text-slate-500 hover:text-slate-900 transition-colors" onClick={() => navigate('/cart')}>
               <ShoppingBag size={20} />
             </button>
           </div>
@@ -123,6 +121,7 @@ export default function ProductDetail() {
                   src={product.image} 
                   alt={product.name} 
                   className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center opacity-10">
@@ -188,7 +187,7 @@ export default function ProductDetail() {
                 </div>
                 <div className="text-center">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Flow Rate</p>
-                  <p className="text-sm font-black text-slate-900">{product.specs.flowRate}</p>
+                  <p className="text-sm font-black text-slate-900">{product.specs.flowRate || 'N/A'}</p>
                 </div>
               </div>
 

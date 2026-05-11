@@ -1,7 +1,7 @@
 export interface Product {
   id: string;
   name: string;
-  category: 'UV' | 'RO' | 'UV+RO' | 'Copper' | 'Mineral';
+  category: 'UV' | 'RO' | 'UV+RO' | 'Copper' | 'Mineral' | 'RO Purifiers' | 'UV Purifiers' | 'Alkaline' | 'Commercial';
   price: number;
   description: string;
   features: string[];
@@ -16,6 +16,7 @@ export interface Product {
     stages: number;
     precision: string;
     flowRate: string;
+    capacity?: string;
   };
 }
 

@@ -7,6 +7,9 @@
   
   --color-primary-blue: #2563eb;
   --color-dark-slate: #0f172a;
+  --color-navy-deep: #020617;
+  --color-electric: #3b82f6;
+  --color-electric-glow: #60a5fa;
 }
 
 @layer base {
@@ -17,6 +20,50 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-display tracking-tight;
   }
+}
+
+.text-gradient-blue {
+  @apply bg-gradient-to-r from-blue-600 via-blue-400 to-cyan-400 bg-clip-text text-transparent;
+}
+
+.bg-grid {
+  background-image: radial-gradient(circle, #3b82f610 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+.radial-glow {
+  background: radial-gradient(circle at center, #3b82f615 0%, transparent 70%);
+}
+
+.glass-dark {
+  @apply bg-[#020617]/40 backdrop-blur-xl border border-white/10;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.02); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+  50% { opacity: 1; box-shadow: 0 0 20px 4px rgba(59, 130, 246, 0.4); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .water-gradient {

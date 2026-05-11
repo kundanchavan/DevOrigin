@@ -21,7 +21,7 @@ const FeatureItem = ({ text }: { text: string }) => (
 
 export default function HomeHero() {
   return (
-    <section className="relative min-h-[40vh] flex flex-col justify-center bg-slate-950 overflow-hidden pt-24 pb-12">
+    <section className="relative min-h-[40vh] flex flex-col justify-center bg-slate-950 overflow-hidden pt-20 pb-10">
       {/* Background Glows */}
       <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none" />
@@ -35,12 +35,12 @@ export default function HomeHero() {
             transition={{ duration: 0.6 }}
             className="space-y-6"
           >
-            <h1 className="text-5xl md:text-7xl font-black text-white leading-[1.1] tracking-tight">
+            <h1 className="text-4xl md:text-6xl font-black text-white leading-[1.1] tracking-tight">
               Pure Water. <br />
               <span className="text-blue-500">True Transparency.</span> <br />
               Total Peace of Mind.
             </h1>
-            <p className="text-slate-400 text-lg md:text-xl max-w-xl font-medium leading-relaxed">
+            <p className="text-slate-400 text-base md:text-lg max-w-xl font-medium leading-relaxed">
               Experience the next generation of smart RO water purifiers. Honest pricing, real-time tracking, and a commitment to your health—with absolutely no hidden charges.
             </p>
           </motion.div>
@@ -51,11 +51,11 @@ export default function HomeHero() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex flex-wrap gap-4"
           >
-            <button className="px-8 py-4 bg-blue-600 text-white rounded-full font-bold text-lg hover:bg-blue-700 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-blue-500/25 flex items-center gap-2 group">
+            <button className="px-6 py-3 bg-blue-600 text-white rounded-full font-bold text-base hover:bg-blue-700 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-blue-500/25 flex items-center gap-2 group">
               Explore Purifiers
-              <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              <ChevronRight size={18} />
             </button>
-            <button className="px-8 py-4 bg-white/5 backdrop-blur-md border border-white/10 text-white rounded-full font-bold text-lg hover:bg-white/10 transition-all flex items-center gap-2 group">
+            <button className="px-6 py-3 bg-white/5 backdrop-blur-md border border-white/10 text-white rounded-full font-bold text-base hover:bg-white/10 transition-all flex items-center gap-2 group">
               <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
                 <Play size={14} className="fill-white" />
               </div>

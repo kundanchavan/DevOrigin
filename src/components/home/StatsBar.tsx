@@ -1,14 +1,17 @@
+import React from 'react';
 import { motion } from 'motion/react';
 import { Home, MapPin, CheckCircle, Users, Headphones } from 'lucide-react';
 
-const StatItem = ({
-  icon: Icon,
-  value,
-  label,
-}: {
+interface StatItemProps {
   icon: any;
   value: string;
   label: string;
+}
+
+const StatItem: React.FC<StatItemProps> = ({
+  icon: Icon,
+  value,
+  label,
 }) => (
   <div className="flex items-center gap-3 px-4 py-2 border-r border-white/5 last:border-r-0 flex-1 min-w-[140px]">
     

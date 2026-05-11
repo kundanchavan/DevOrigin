@@ -41,7 +41,7 @@ function AppContent() {
       <Header />
       <main className={cn(
         "relative flex-grow shadow-2xl transition-colors duration-500 z-10 rounded-b-[2.5rem] mb-[-2px] overflow-hidden bg-white",
-        isHomePage && "bg-slate-950"
+        isHomePage && "bg-[#050816]"
       )}>
         <Routes>
           <Route path="/" element={<Home />} />
