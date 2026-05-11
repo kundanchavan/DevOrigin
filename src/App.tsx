@@ -15,6 +15,11 @@ import Login from './pages/Login.tsx';
 import Signup from './pages/Signup.tsx';
 import ProductDetail from './pages/ProductDetail.tsx';
 import Dashboard from './pages/Dashboard.tsx';
+import WaterQuality from './pages/WaterQuality.tsx';
+import PurifierHealth from './pages/PurifierHealth.tsx';
+import UsageAnalytics from './pages/UsageAnalytics.tsx';
+import ServiceSupport from './pages/ServiceSupport.tsx';
+import AMCBilling from './pages/AMCBilling.tsx';
 import { CinematicFooter } from './components/ui/motion-footer.tsx';
 import { CartProvider } from './context/CartContext.tsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
@@ -54,6 +59,11 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/water-quality" element={<WaterQuality />} />
+          <Route path="/dashboard/purifier-health" element={<PurifierHealth />} />
+          <Route path="/dashboard/usage-analytics" element={<UsageAnalytics />} />
+          <Route path="/dashboard/service-support" element={<ServiceSupport />} />
+          <Route path="/dashboard/amc-billing" element={<AMCBilling />} />
           <Route path="/product/:id" element={<ProductDetail />} />
         </Routes>
       </main>

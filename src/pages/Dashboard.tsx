@@ -4,26 +4,15 @@ import {
   Droplet, 
   ShieldCheck, 
   BarChart3, 
-  Wrench, 
-  CreditCard, 
-  History, 
-  Bell, 
-  UserPlus, 
-  Settings, 
-  LogOut,
-  ChevronDown,
-  LayoutDashboard,
-  Search,
   CheckCircle2,
-  AlertCircle,
   Clock,
-  ExternalLink,
-  ArrowRight,
-  TrendingDown,
-  Monitor,
   Smartphone,
   HelpCircle,
-  Plus
+  Plus,
+  TrendingDown,
+  Wrench,
+  AlertCircle,
+  Settings
 } from 'lucide-react';
 import { 
   LineChart, 
@@ -39,6 +28,7 @@ import {
   PieChart,
   Pie
 } from 'recharts';
+import DashboardLayout from '../components/dashboard/DashboardLayout';
 
 // Mock Data
 const tdsData = [
@@ -93,167 +83,8 @@ const familyMembers = [
 ];
 
 export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState('Dashboard');
-  const [activeSidebar, setActiveSidebar] = useState('Overview');
-
-  const sidebarItems = [
-    { icon: LayoutDashboard, label: 'Overview' },
-    { icon: Droplet, label: 'Water Quality' },
-    { icon: ShieldCheck, label: 'Purifier Health' },
-    { icon: BarChart3, label: 'Usage Analytics' },
-    { icon: Wrench, label: 'Service & Support' },
-    { icon: CreditCard, label: 'AMC & Billing' },
-    { icon: History, label: 'Transactions' },
-    { icon: Bell, label: 'Smart Alerts' },
-    { icon: UserPlus, label: 'Family Access' },
-    { icon: Settings, label: 'Settings' },
-  ];
-
-  const topTabs = [
-    'Dashboard', 'My Purifier', 'Service', 'Analytics', 'AMC & Billing', 'Store'
-  ];
-
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex pt-20">
-      {/* Sidebar */}
-      <aside className="w-72 bg-[#050816] text-white flex flex-col fixed left-0 top-20 bottom-0 z-40">
-        <div className="p-8 pb-4">
-          <div className="bg-slate-900/50 rounded-2xl p-4 border border-white/5 flex items-center gap-4">
-            <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center">
-               <Monitor className="text-blue-400" size={24} />
-            </div>
-            <div>
-              <div className="text-sm font-bold">Dew Origin Aura</div>
-              <div className="text-[10px] text-slate-400 font-medium tracking-widest uppercase mb-1">Matte Black</div>
-              <div className="flex items-center gap-1.5">
-                 <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                 <span className="text-[10px] font-bold text-green-500">Online</span>
-              </div>
-            </div>
-          </div>
-          <div className="mt-2 text-[10px] text-slate-500 text-center font-medium">Device ID: DOA-23A7B6</div>
-        </div>
-
-        <nav className="flex-grow px-4 py-6 space-y-1">
-          {sidebarItems.map((item) => (
-            <button
-              key={item.label}
-              onClick={() => setActiveSidebar(item.label)}
-              className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all ${
-                activeSidebar === item.label 
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' 
-                : 'text-slate-400 hover:bg-white/5 hover:text-white'
-              }`}
-            >
-              <item.icon size={20} strokeWidth={activeSidebar === item.label ? 2.5 : 1.5} />
-              <span className="text-sm font-bold tracking-tight">{item.label}</span>
-            </button>
-          ))}
-        </nav>
-
-        <div className="p-8 pt-0">
-           <div className="bg-blue-600/10 rounded-2xl p-6 border border-blue-600/20 group cursor-pointer text-center">
-              <TrendingDown className="text-blue-400 mb-3 mx-auto" size={24} />
-              <div className="font-bold mb-1">Refer & Earn</div>
-              <div className="text-[10px] text-slate-400 mb-4 leading-relaxed">Refer your friends and earn up to ₹500</div>
-              <button className="w-full py-3 bg-blue-600/20 text-blue-400 rounded-xl text-[10px] font-black uppercase tracking-widest border border-blue-600/30 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                Refer Now →
-              </button>
-           </div>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-grow ml-72 p-8 overflow-y-auto">
-        {/* Top Header */}
-        <div className="flex items-center justify-between mb-8">
-          <nav className="flex items-center gap-8">
-            {topTabs.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`text-sm font-bold transition-all relative py-1 ${
-                  activeTab === tab ? 'text-blue-600' : 'text-slate-500 hover:text-slate-900'
-                }`}
-              >
-                {tab}
-                {activeTab === tab && (
-                  <motion.div layoutId="activeTab" className="absolute -bottom-1 left-0 right-0 h-0.5 bg-blue-600" />
-                )}
-              </button>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-6">
-            <button className="relative w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-colors">
-              <Bell size={20} />
-              <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[10px] font-black rounded-full border-2 border-white flex items-center justify-center">3</span>
-            </button>
-            <button className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-colors">
-              <HelpCircle size={20} />
-            </button>
-            <div className="flex items-center gap-3 pl-4 border-l border-slate-200">
-              <div className="text-right">
-                <div className="text-sm font-bold text-slate-900 tracking-tight">Arjun Sharma</div>
-                <div className="text-[10px] font-medium text-slate-500">Bengaluru, KA</div>
-              </div>
-              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm">
-                <img src={familyMembers[0].image} alt="Profile" className="w-full h-full object-cover" />
-              </div>
-              <ChevronDown size={14} className="text-slate-400" />
-            </div>
-          </div>
-        </div>
-
-        {/* Welcome Section */}
-        <div className="grid lg:grid-cols-[1fr_360px] gap-6 mb-8">
-          <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm">
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight mb-2">Good Morning, Arjun! 👋</h1>
-            <p className="text-slate-500 text-sm mb-8">Your purifier is working perfectly and your water is safe.</p>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { label: 'Water Quality', value: 'Good', sub: '620 TDS', icon: Droplet, color: 'text-blue-500' },
-                { label: 'Purifier Health', value: 'Excellent', sub: 'All Systems Normal', icon: ShieldCheck, color: 'text-green-500' },
-                { label: 'Filter Status', value: 'Good', sub: '2 Active • 0 Due', icon: Settings, color: 'text-indigo-500' },
-                { label: 'Next Service', value: 'In 45 Days', sub: '24 Jun 2024', icon: Clock, color: 'text-orange-500' },
-              ].map((stat, i) => (
-                <div key={i} className="p-4 rounded-2xl border border-slate-50 bg-slate-50/50">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className={`w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm ${stat.color}`}>
-                      <stat.icon size={16} />
-                    </div>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{stat.label}</span>
-                  </div>
-                  <div className="text-lg font-black text-slate-900 tracking-tight">{stat.value}</div>
-                  <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{stat.sub}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden flex flex-col justify-between shadow-2xl">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/20 blur-[100px] rounded-full" />
-            <div className="relative z-10">
-              <h2 className="text-2xl font-black tracking-tight mb-3 leading-tight">Your Water is<br />Safe & Pure</h2>
-              <p className="text-slate-400 text-xs leading-relaxed">Keep it up! Your water quality is better than 78% of homes in your area.</p>
-            </div>
-            
-            <div className="relative z-10">
-              <div className="flex justify-center mb-6">
-                 <div className="relative">
-                    <ShieldCheck size={80} className="text-blue-500 opacity-20" />
-                    <ShieldCheck size={80} className="text-blue-400 absolute inset-0 [filter:drop-shadow(0_0_15px_rgba(59,130,246,0.5))]" />
-                    <CheckCircle2 size={24} className="absolute bottom-0 right-0 text-white bg-green-500 rounded-full border-2 border-slate-900" />
-                 </div>
-              </div>
-              <button className="w-full py-3.5 bg-blue-600/10 border border-blue-600/30 text-blue-400 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all">
-                View Water Quality Report →
-              </button>
-            </div>
-          </div>
-        </div>
-
+    <DashboardLayout>
         {/* Charts & Status Grid */}
         <div className="grid lg:grid-cols-[1fr_360px] gap-6 mb-8">
           {/* Live Water Quality */}
@@ -424,7 +255,7 @@ export default function Dashboard() {
                 </div>
                 <div className="relative">
                   <button className="text-[10px] font-black text-slate-500 flex items-center gap-1 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                    This Year <ChevronDown size={10} />
+                    This Year <TrendingDown size={10} />
                   </button>
                 </div>
              </div>
@@ -580,7 +411,6 @@ export default function Dashboard() {
              </div>
            </div>
         </div>
-      </main>
-    </div>
+    </DashboardLayout>
   );
 }

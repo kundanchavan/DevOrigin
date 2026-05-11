@@ -333,6 +333,10 @@ export function CinematicFooter() {
                   Products
                 </MagneticButton>
                 
+                <MagneticButton as="a" href="/dashboard" className="footer-glass-pill px-6 py-3 rounded-full text-white font-bold text-xs flex items-center gap-3 group transition-transform">
+                  Dashboard
+                </MagneticButton>
+                
                 <MagneticButton as="a" href="/about" className="footer-glass-pill px-6 py-3 rounded-full text-white font-bold text-xs flex items-center gap-3 group transition-transform">
                   About
                 </MagneticButton>
