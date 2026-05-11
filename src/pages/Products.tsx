@@ -11,7 +11,6 @@ import ProductHero from '@/components/product/ProductHero';
 import DetailStats from '@/components/product/DetailStats';
 import HorizontalTech from '@/components/product/HorizontalTech';
 import FeatureGrid from '@/components/product/FeatureGrid';
-import SmartAppSection from '@/components/product/SmartAppSection';
 import SpecsSection from '@/components/product/SpecsSection';
 import MaintenancePricing from '@/components/product/MaintenancePricing';
 import FooterCTA from '@/components/product/FooterCTA';
@@ -120,13 +119,10 @@ export default function ProductsPage() {
       {/* 6. Pricing Section (Maintenance) */}
       <MaintenancePricing />
 
-      {/* 7. Specifications Section */}
+      {/* 7. Specifications & Smart App Section */}
       <SpecsSection />
 
-      {/* 8. Smart App Section */}
-      <SmartAppSection />
-
-      {/* 9. Footer CTA */}
+      {/* 8. Footer CTA */}
       <FooterCTA />
     </div>
   );

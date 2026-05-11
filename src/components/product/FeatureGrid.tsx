@@ -30,9 +30,9 @@ export default function FeatureGrid() {
   ];
 
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-[1400px] mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <section className="py-12 bg-white">
+      <div className="max-w-[1200px] mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {features.map((feature, i) => (
             <motion.div
               key={i}
