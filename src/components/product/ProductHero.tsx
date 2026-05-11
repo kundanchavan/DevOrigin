@@ -12,7 +12,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
     name: "Aura",
     tagline: "Premium Purity. Intelligent Inside.",
     price: 24999,
-    image: "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?auto=format&fit=crop&q=80&w=1000",
+    image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1000",
     description: "Experience the next level of molecular water purification with Aura. Featuring our patented graphene sieve and real-time TDS monitoring for the ultimate peace of mind.",
     features: ["11 Stage Purification", "Real-time TDS Monitoring", "Smart App Connectivity", "Patent Pending Technology"]
   };
@@ -74,16 +74,43 @@ export default function ProductHero({ product }: ProductHeroProps) {
             transition={{ duration: 1 }}
             className="lg:col-span-5 relative order-1 lg:order-2 flex justify-center"
           >
-            <div className="relative w-full max-w-[500px]">
+            <div className="relative w-full max-w-[500px]" style={{ perspective: '1000px' }}>
               {/* Glow Backdrop */}
               <div className="absolute inset-10 bg-blue-400/20 blur-[100px] rounded-full animate-pulse" />
               
-              <img 
-                src={aura.image} 
-                alt="Purifier Aura" 
-                className="relative z-10 w-full h-auto drop-shadow-[0_20px_50px_rgba(30,58,138,0.15)] animate-float-slow"
-                referrerPolicy="no-referrer"
-              />
+                <motion.div
+                  animate={{ 
+                    y: [0, -10, 0],
+                    rotateY: [0, 10, 0],
+                    rotateX: [0, -5, 0],
+                  }}
+                  transition={{ 
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  whileHover={{ 
+                    rotateY: 25,
+                    rotateX: -15,
+                    scale: 1.08,
+                    transition: { duration: 0.3 }
+                  }}
+                  className="relative z-10 cursor-pointer preserve-3d"
+                >
+                  <img 
+                    src={aura.image} 
+                    alt="Purifier Aura 3D View" 
+                    className="w-full h-auto drop-shadow-[0_40px_80px_rgba(30,58,138,0.3)] filter brightness-105"
+                    referrerPolicy="no-referrer"
+                    onLoad={() => console.log('Hero image loaded')}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1000';
+                    }}
+                  />
+                  
+                  {/* 3D Reflection Highlight Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/30 pointer-events-none rounded-3xl mix-blend-overlay" />
+                </motion.div>
 
               {/* Floating UI: TDS */}
               <motion.div 
