@@ -83,5 +83,18 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     @apply bg-slate-300;
   }
+
+  .custom-scrollbar-sidebar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar-sidebar::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full;
+  }
+  .custom-scrollbar-sidebar::-webkit-scrollbar-thumb:hover {
+    @apply bg-white/20;
+  }
 }
 
