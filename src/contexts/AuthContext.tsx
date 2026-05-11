@@ -20,7 +20,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('dev_origin_user');
+    const savedUser = localStorage.getItem('dew_origin_user');
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
@@ -30,19 +30,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Mock login
     const user = { id: Math.random().toString(36).substr(2, 9), email, name };
     setUser(user);
-    localStorage.setItem('dev_origin_user', JSON.stringify(user));
+    localStorage.setItem('dew_origin_user', JSON.stringify(user));
   };
 
   const signup = async (email: string, name: string) => {
     // Mock signup
     const user = { id: Math.random().toString(36).substr(2, 9), email, name };
     setUser(user);
-    localStorage.setItem('dev_origin_user', JSON.stringify(user));
+    localStorage.setItem('dew_origin_user', JSON.stringify(user));
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('dev_origin_user');
+    localStorage.removeItem('dew_origin_user');
   };
 
   return (

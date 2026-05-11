@@ -38,7 +38,7 @@ export default function LoginPage() {
         </div>
         
         <h1 className="text-3xl font-bold text-center mb-2">Welcome Back</h1>
-        <p className="text-slate-500 text-center mb-8">Access your Dev Origin dashboard</p>
+        <p className="text-slate-500 text-center mb-8">Access your Dew Origin dashboard</p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">

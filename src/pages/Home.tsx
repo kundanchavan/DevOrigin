@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { ArrowRight, CheckCircle2, ShieldCheck, Zap, Droplets, Star, ShoppingBag, Layers, Cpu, Waves, Settings2, Play, Eye, Loader2 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -7,9 +7,9 @@ import { Product } from '@/types';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import ProductCard from '@/components/common/ProductCard';
 import NewLaunches from '@/components/NewLaunches';
-import ShaderShowcase from '@/components/ui/hero';
 
-import { CinematicHero } from '@/components/ui/cinematic-landing-hero';
+import HomeHero from '@/components/home/HomeHero';
+import StatsBar from '@/components/home/StatsBar';
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -34,114 +34,51 @@ export default function Home() {
     loadData();
   }, []);
 
-  const defaultMediaGallery = [
+  // Sample Mock Data for Purifier Cards as requested
+  const mockPurifiers: Product[] = [
     {
-      title: 'Advanced Filter Core',
-      category: 'Filtration',
-      image: 'https://images.unsplash.com/photo-1585832770484-4ad8447ca12b?auto=format&fit=crop&q=80&w=800',
-      isVideo: true,
-      desc: '9-layer nano-carbon mesh and graphene stabilization in action.'
+      id: "p1",
+      name: "Dew Ultra Max",
+      price: 18999,
+      tagline: "Total Purification",
+      image: "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?auto=format&fit=crop&q=80&w=800",
+      category: "RO Purifiers",
+      tag: "Best Seller",
+      specs: { precision: "0.0001 Micron", stages: 9, capacity: "12L/hr" },
+      features: ["Copper Infusion", "UV-C Sterilization", "App Tracking"]
     },
     {
-      title: 'UV-C Plasma unit',
-      category: 'Sterilization',
-      image: 'https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?auto=format&fit=crop&q=80&w=800',
-      isVideo: false,
-      desc: 'Cold-plasma UV unit rendering bacteria inert at 254nm wavelength.'
-    },
-    {
-      title: 'Copper Alloy Candle',
-      category: 'Vitality',
-      image: 'https://images.unsplash.com/photo-1444676632488-26a136c45b9b?auto=format&fit=crop&q=80&w=800',
-      isVideo: false,
-      desc: 'Antioxidant infusion process through high-purity copper ceramic.'
-    },
-    {
-      title: 'High-Pressure Logic',
-      category: 'Pipes & Flow',
-      image: 'https://images.unsplash.com/photo-1581093583449-80d50ad975e5?auto=format&fit=crop&q=80&w=800',
-      isVideo: true,
-      desc: 'Precision hydraulic routing system for zero-leak performance.'
-    },
-    {
-      title: 'Design Shell v4',
-      category: 'External Body',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800',
-      isVideo: false,
-      desc: 'Anodized aluminum and reinforced glass exterior finishes.'
+      id: "p2",
+      name: "Dew Slim Elite",
+      price: 14500,
+      tagline: "Compact Design",
+      image: "https://images.unsplash.com/photo-1581093583449-80d50ad975e5?auto=format&fit=crop&q=80&w=800",
+      category: "RO Purifiers",
+      tag: "New Launch",
+      specs: { precision: "0.001 Micron", stages: 7, capacity: "10L/hr" },
+      features: ["Transparent Tank", "Wall Mount", "Zero Water Waste"]
     }
   ];
-
-  const mediaGallery = siteData?.gallery || defaultMediaGallery;
-  const features = siteData?.features || [
-    { 
-      icon: ShieldCheck, 
-      title: '9-Stage Purity', 
-      desc: 'From sediment pre-filters to biological UV treatment, nothing escapes our system.' 
-    },
-    { 
-      icon: Zap, 
-      title: 'Instant Mineralization', 
-      desc: 'Automatically re-adds essential minerals like calcium and magnesium back into your flow.' 
-    },
-    { 
-      icon: CheckCircle2, 
-      title: 'Intelligent Monitoring', 
-      desc: 'Real-time TDS measurement and filter life tracking synced directly to your phone.' 
-    }
-  ];
-
-  const heroContent = (siteData?.settings && siteData.settings.hero) ? siteData.settings.hero : {
-    title: "Engineered for Vitality",
-    subtitle: "Our patented technology doesn't just clean water; it restores its natural molecular structure."
-  };
 
   const bestSellers = products.filter(p => p.tag === 'Best Seller').slice(0, 5);
   const displayBestSellers = bestSellers.length > 0 ? bestSellers : products.slice(0, 5);
 
   return (
     <div className="flex flex-col w-full">
-      {/* Hero Shader Showcase */}
-      <ShaderShowcase className="min-h-screen" />
+      {/* New Hero Section */}
+      <HomeHero />
 
-      {/* Featured Features */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">{heroContent.title}</h2>
-            <p className="text-slate-500 max-w-2xl mx-auto">{heroContent.subtitle}</p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {features.map((feature: any, i: number) => {
-              const Icon = feature.icon || ShieldCheck;
-              return (
-                <motion.div
-                  key={i}
-                  whileHover={{ y: -10 }}
-                  className="p-8 rounded-3xl border border-slate-100 hover:border-blue-100 hover:shadow-xl transition-all"
-                >
-                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mb-6">
-                    {typeof Icon === 'function' ? <Icon size={28} /> : <ShieldCheck size={28} />}
-                  </div>
-                  <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
-                  <p className="text-slate-600 leading-relaxed">{feature.desc}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
-      {/* Featured Products List */}
-      <section className="relative py-24 bg-white overflow-hidden">
+      {/* Featured Products List (Best Sellers) */}
+      <section className="relative py-16 bg-white overflow-hidden">
         <div className="relative z-10 max-w-[1200px] mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
             <div className="space-y-2">
               <h2 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 leading-tight">
                 Best Sellers
               </h2>
-              <p className="text-slate-500 font-medium">Our most trusted molecular purification units.</p>
+              <p className="text-slate-500 font-medium tracking-tight">Our most trusted molecular purification units.</p>
             </div>
             <NavLink 
               to="/products"
@@ -158,7 +95,7 @@ export default function Home() {
                 <p className="font-bold tracking-widest uppercase text-xs">Fetching Molecular Data...</p>
               </div>
             ) : (
-              displayBestSellers.map((product) => (
+              (displayBestSellers.length > 0 ? displayBestSellers : mockPurifiers).map((product) => (
                 <div key={product.id} className="h-full">
                   <ProductCard product={product} />
                 </div>
@@ -168,12 +105,14 @@ export default function Home() {
         </div>
       </section>
 
+            {/* New Stats Bar */}
+      <StatsBar />
 
       {/* New Launches Integration */}
-      <NewLaunches products={products} />
+      <NewLaunches products={products.length > 0 ? products : mockPurifiers} />
 
       {/* Technical Anatomy Section */}
-      <section className="py-24 bg-white overflow-hidden">
+      <section className="py-16 bg-slate-50 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <div className="relative order-2 lg:order-1">
@@ -189,7 +128,7 @@ export default function Home() {
                     <div className="relative w-full h-full bg-white shadow-2xl rounded-3xl border border-slate-100 overflow-hidden group">
                       <img 
                         src="https://images.unsplash.com/photo-1581093583449-80d50ad975e5?auto=format&fit=crop&q=80&w=800" 
-                        alt="Aura PURITY unit interface"
+                        alt="Dew PURITY unit interface"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         referrerPolicy="no-referrer"
                       />
@@ -240,7 +179,7 @@ export default function Home() {
                 </motion.div>
               </div>
 
-              {/* Glowing Aura */}
+              {/* Glowing Dew Origin */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-blue-400/5 blur-[120px] rounded-full -z-10" />
             </div>
 
@@ -302,26 +241,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Experience Innovation */}
-      <motion.section 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-        className="relative bg-slate-950 mt-[-1px]"
-      >
-        <CinematicHero 
-          brandName="Aura"
-          tagline1="Pure flow,"
-          tagline2="total vitality."
-          cardHeading="Next-gen molecular routing."
-          cardDescription={<>Our patented <span className="text-white font-semibold">Aura Core</span> technology provides 9-stage filtration with real-time TDS monitoring and antioxidant re-infusion for the purest water on the planet.</>}
-          metricValue={99.9}
-          metricLabel="Purity %"
-          ctaHeading="Experience the future of water."
-          ctaDescription="Join over 50,000 households that trust Aura to deliver molecularly perfect water every single day."
-        />
-      </motion.section>
+      {/* Scientific Validation - keeping the technical anatomy but removing the obsolete CinematicHero */}
     </div>
   );
 }

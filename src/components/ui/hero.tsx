@@ -133,7 +133,7 @@ export default function ShaderShowcase({ className }: { className?: string }) {
             </defs>
             <text className="text-[10px] fill-white/40 font-bold uppercase tracking-widest">
               <textPath href="#circlePath" startOffset="0%">
-                Dev Origin • Swiss Purity • Radical Design • Dev Origin • Swiss Purity • Radical Design •
+                Dew Origin • Swiss Purity • Radical Design • Dew Origin • Swiss Purity • Radical Design •
               </textPath>
             </text>
           </motion.svg>

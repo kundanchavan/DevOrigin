@@ -21,7 +21,7 @@ const STYLES = `
   font-family: 'Plus Jakarta Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   
-  /* Dynamic Variables adjusted for dark Dev Origin theme */
+  /* Dynamic Variables adjusted for dark Dew Origin theme */
   --pill-bg-1: rgba(255, 255, 255, 0.03);
   --pill-bg-2: rgba(255, 255, 255, 0.01);
   --pill-shadow: rgba(0, 0, 0, 0.5);
@@ -306,7 +306,7 @@ export function CinematicFooter() {
             ref={giantTextRef}
             className="footer-giant-bg-text absolute -bottom-[2vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none opacity-40"
           >
-            AURA
+            DEW
           </div>
 
           {/* 1. Diagonal Sleek Marquee (Top of footer) */}
@@ -357,7 +357,7 @@ export function CinematicFooter() {
             
             {/* Copyright */}
             <div className="text-white/20 text-[10px] font-semibold tracking-widest uppercase">
-              © 2024 Aura Origin. All rights reserved.
+              © 2024 Dew Origin. All rights reserved.
             </div>
 
             {/* Back to top */}

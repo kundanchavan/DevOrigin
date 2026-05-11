@@ -51,14 +51,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = 'light', c
         onClick={() => navigate(`/product/${product.id}`)}
       >
         <div className={cn(
-          "relative aspect-square overflow-hidden",
+          "relative aspect-[16/10] overflow-hidden p-8 flex items-center justify-center",
           isDark ? "bg-slate-800" : "bg-slate-50"
         )}>
           {product.image ? (
             <img 
               src={product.image} 
               alt={product.name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-slate-300">
@@ -88,13 +88,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = 'light', c
           </div>
         </div>
 
-        <div className={cn("p-4 flex flex-col flex-grow relative z-10", compact ? "p-2.5" : "p-4")}>
+        <div className={cn("p-4 flex flex-col flex-grow relative z-10", compact ? "p-2.5" : "p-3")}>
           <div className="flex items-center gap-1 mb-1">
             <Star size={8} className="fill-blue-500 text-blue-500" />
             <span className={cn("text-[8px]", isDark ? "text-slate-500" : "text-slate-400")}>4.9</span>
           </div>
           
-          <div className="flex flex-col mb-3">
+          <div className="flex flex-col mb-2">
             <h3 className={cn(
               "font-bold leading-tight transition-colors mb-0.5",
               compact ? "text-xs" : "text-sm",
@@ -103,7 +103,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = 'light', c
               {product.name}
             </h3>
             {product.tagline && (
-              <p className="text-[9px] md:text-[10px] font-bold text-blue-400 uppercase tracking-tight mb-1.5 font-mono">
+              <p className="text-[9px] md:text-[10px] font-bold text-blue-400 uppercase tracking-tight mb-1 font-mono">
                 {product.tagline}
               </p>
             )}
@@ -117,11 +117,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = 'light', c
           </div>
           
           {!compact && product.features && product.features.length > 0 && (
-            <div className="space-y-1 mb-4 mt-1">
-              {product.features.slice(0, 4).map((feature, idx) => (
+            <div className="space-y-1 mb-3 mt-0.5">
+              {product.features.slice(0, 2).map((feature, idx) => (
                 <div key={idx} className="flex items-start gap-2">
                   <div className="mt-0.5 shrink-0">
-                    <Check size={12} className="text-green-500 font-bold" />
+                    <Check size={10} className="text-green-500 font-bold" />
                   </div>
                   <span className={cn("text-[10px] font-medium leading-tight", isDark ? "text-slate-400" : "text-slate-600")}>
                     {feature}
@@ -140,9 +140,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = 'light', c
             </p>
           )}
 
-          <div className="mt-auto space-y-2">
+          <div className="mt-auto space-y-1">
             <div className={cn(
-              "flex items-center justify-between pt-2 border-t",
+              "flex items-center justify-between pt-1 border-t",
               isDark ? "border-white/5" : "border-slate-50"
             )}>
               <div className="flex flex-col">

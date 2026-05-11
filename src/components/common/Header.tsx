@@ -46,7 +46,7 @@ export default function Header() {
             'text-2xl font-bold tracking-tighter transition-colors',
             isScrolled ? 'text-slate-900' : (isHomePage ? 'text-white' : 'text-slate-900')
           )}>
-            Dev Origin
+            Dew Origin
           </span>
         </NavLink>
 

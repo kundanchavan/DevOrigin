@@ -19,9 +19,9 @@ export default function NewLaunches({ products }: NewLaunchesProps) {
   if (newLaunches.length === 0) return null;
 
   return (
-    <section className="py-24 bg-white overflow-hidden">
+    <section className="py-16 bg-white overflow-hidden">
       <div className="max-w-[1200px] mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
           <div className="space-y-2">
             <h2 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 leading-tight">
               New Launches

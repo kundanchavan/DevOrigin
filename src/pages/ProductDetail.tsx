@@ -318,7 +318,7 @@ export default function ProductDetail() {
                 </div>
                 <div className="bg-slate-950 rounded-[2.5rem] p-8 text-white relative overflow-hidden group">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/20 blur-3xl rounded-full" />
-                  <h4 className="text-2xl font-bold mb-4">Aura Assurance™</h4>
+                  <h4 className="text-2xl font-bold mb-4">Dew Assurance™</h4>
                   <p className="text-slate-400 text-sm mb-6">Every unit comes with our 30-day "Perfect Purity" guarantee and free installation.</p>
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">

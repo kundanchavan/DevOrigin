@@ -172,7 +172,7 @@ export default function AdminPage() {
                 <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white">
                   <Droplets size={20} />
                 </div>
-                <span className="font-bold tracking-tighter">Dev Origin CRM</span>
+                <span className="font-bold tracking-tighter">Dew Origin CRM</span>
               </div>
 
               <nav className="space-y-2">
